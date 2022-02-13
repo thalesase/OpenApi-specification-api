@@ -1,9 +1,7 @@
 package com.openapispecification.api.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Workspace {
@@ -14,17 +12,31 @@ public class Workspace {
 
     private String name;
 
-    public Workspace(String name) {
-        this.name = name;
-    }
+    @ManyToOne
+    private Corporation corporation;
 
-    public Workspace(){}
+    @ManyToMany(fetch=FetchType.EAGER)
+    @JoinTable(
+            name = "user_workspace",
+            joinColumns = @JoinColumn(name = "id_workspace"),
+            inverseJoinColumns = @JoinColumn(name = "id_user"))
+    private List<User> userList;
+
+    public Workspace() {}
+
+    public Long getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Corporation getCorporation() {
+        return corporation;
+    }
+
+    public List<User> getUserList() {
+        return userList;
     }
 }
